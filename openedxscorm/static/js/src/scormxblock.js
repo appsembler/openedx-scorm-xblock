@@ -226,6 +226,7 @@ function ScormXBlock(runtime, element, settings) {
             type: "POST",
             url: setValuesUrl,
             data: JSON.stringify(data),
+            contentType: "application/json",
             success: function (results) {
                 for (var i = 0; i < results.length; i += 1) {
                     var result = results[i];
