@@ -88,6 +88,38 @@ This should be added both to the LMS and the CMS settings. Instead of a function
         "STORAGE_FUNC": "my.custom.storage.module.get_scorm_storage_function",
     }
 
+Note that the SCORM XBlock comes with S3 storage support out of the box. See the following section:
+
+S3 storage
+~~~~~~~~~~
+
+The SCORM XBlock may be configured to proxy static SCORM assets stored in either public or private S3 buckets. To configure S3 storage, add the following to your LMS and CMS settings::
+
+    XBLOCK_SETTINGS["ScormXBlock"] = {
+        "STORAGE_FUNC": "openedxscorm.storage.s3"
+    }
+
+You may define the following additional settings in ``XBLOCK_SETTINGS["ScormXBlock"]``:
+
+* ``S3_BUCKET_NAME`` (default: ``AWS_STORAGE_BUCKET_NAME``): to store SCORM assets in a specific bucket.
+* ``S3_QUERY_AUTH`` (default: ``True``): boolean flag (``True`` or ``False``) for query string authentication in S3 urls. If your bucket is public, set this value to ``False``. But be aware that in such case your SCORM assets will be publicly available to everyone.
+* ``S3_EXPIRES_IN`` (default: 604800): time duration (in seconds) for the presigned URLs to stay valid. The default is one week.
+
+These settings may be added to Tutor by creating a `plugin <https://docs.tutor.overhang.io/plugins/>`__::
+
+    from tutor import hooks
+
+    hooks.Filters.ENV_PATCHES.add_item(
+        (
+            "openedx-common-settings",
+            """
+    XBLOCK_SETTINGS["ScormXBlock"] = {
+        "STORAGE_FUNC": "openedxscorm.storage.s3",
+        "S3_BUCKET_NAME": "mybucket",
+        ...
+    }"""
+    )
+
 Development
 -----------
 
