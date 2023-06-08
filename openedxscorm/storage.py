@@ -39,7 +39,9 @@ class S3ScormStorage(S3Boto3Storage):
                 self.xblock, "assets_proxy"
             ).rstrip("?/")
             # Note that we serve the index page here.
-            return f"{proxy_base_url}/{self.xblock.index_page_path}"
+            return "{proxy_base_url}/{index_page_path}".format(
+                proxy_base_url=proxy_base_url, index_page_path=self.xblock.index_page_path
+            )
 
         # This branch is executed when the `url` method is called from `assets_proxy`
         return super().url(
