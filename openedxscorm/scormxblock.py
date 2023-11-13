@@ -23,6 +23,7 @@ from six import string_types
 from web_fragments.fragment import Fragment
 from xblock.core import XBlock
 from xblock.completable import CompletableXBlockMixin
+from xblock.scorable import ScorableXBlockMixin
 from xblock.exceptions import JsonHandlerError
 from xblock.fields import Scope, String, Float, Boolean, Dict, DateTime, Integer
 
@@ -48,7 +49,7 @@ logger = logging.getLogger(__name__)
 
 @XBlock.wants("settings")
 @XBlock.wants("user")
-class ScormXBlock(XBlock, CompletableXBlockMixin):
+class ScormXBlock(XBlock, CompletableXBlockMixin, ScorableXBlockMixin):
     """
     When a user uploads a Scorm package, the zip file is stored in:
 
