@@ -1,6 +1,9 @@
 SCORM XBlock for Open edX
 =========================
 
+**Appsembler Tahoe compat version**
+
+
 This is an XBlock to display `SCORM <https://en.wikipedia.org/wiki/Scorm>`__ content within the `Open edX <https://openedx.org>`__ LMS and Studio. It will save student state and report scores to the progress tab of the course.
 Currently supports SCORM 1.2 and SCORM 2004 standard.
 

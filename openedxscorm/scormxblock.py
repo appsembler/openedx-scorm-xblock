@@ -368,6 +368,8 @@ class ScormXBlock(XBlock, CompletableXBlockMixin):
             return {"value": self.success_status}
         if name in ["cmi.core.score.raw", "cmi.score.raw"]:
             return {"value": self.lesson_score * 100}
+        if name == "cmi.score.scaled":
+            return {"value": self.lesson_score}
         if name in ["cmi.core.student_id", "cmi.learner_id"]:
             return {"value": self.get_current_user_attr("edx-platform.user_id")}
         if name in ["cmi.core.student_name", "cmi.learner_name"]:
@@ -393,6 +395,8 @@ class ScormXBlock(XBlock, CompletableXBlockMixin):
         completion_status = None
         lesson_score = None
 
+        is_completed = self.lesson_status == "completed"
+
         self.scorm_data[name] = value
         if name == "cmi.core.lesson_status":
             lesson_status = data.get("value")
@@ -406,6 +410,8 @@ class ScormXBlock(XBlock, CompletableXBlockMixin):
             completion_status = value
         elif name in ["cmi.core.score.raw", "cmi.score.raw"] and self.has_score:
             lesson_score = parse_validate_positive_float(value, name) / 100.0
+        elif name == "cmi.score.scaled" and self.has_score:
+            lesson_score = parse_validate_positive_float(value, name)
         elif name == "cmi.progress_measure":
             completion_percent = parse_validate_positive_float(value, name)
 
@@ -422,7 +428,7 @@ class ScormXBlock(XBlock, CompletableXBlockMixin):
             self.success_status = success_status
         if completion_status == "completed":
             self.emit_completion(1)
-        if success_status or completion_status == "completed":
+        if success_status or completion_status == "completed" or (is_completed and lesson_score):
             if self.has_score:
                 self.publish_grade()
 
